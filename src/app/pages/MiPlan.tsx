@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { Button, NumberField, ProgressRing, Slider, Stat } from '../../components/ui'
 import { budget503020, emergencyFund, fmt, healthScore, meses, monthlyForGoal } from '../../lib/finance'
 import { useProfile, type Profile } from '../../lib/storage'
+import { isArtifact } from '../../lib/env'
 import { ArrowRight, Check, ChevronLeft, Printer, Target } from '../../components/icons'
 
 interface Step {
@@ -87,7 +88,7 @@ export default function MiPlan() {
         <h1 className="flex items-center gap-3 text-3xl font-extrabold text-white sm:text-4xl">
           <Target className="h-8 w-8 text-mint-300" /> Mi plan financiero
         </h1>
-        <p className="mt-2 text-slate-400">Responde 3 pasos y obtén un plan priorizado que puedes imprimir o guardar en PDF.</p>
+        <p className="mt-2 text-slate-400">Responde 3 pasos y obtén un plan priorizado{isArtifact ? '.' : ' que puedes imprimir o guardar en PDF.'}</p>
       </div>
 
       <div className="no-print mb-8 flex items-center gap-2">
@@ -168,9 +169,11 @@ export default function MiPlan() {
                   <div className="text-3xl font-extrabold text-white">{p.name || 'Mi plan'}</div>
                   <div className="mt-1 text-sm text-slate-400">Generado el {new Date().toLocaleDateString('es')}</div>
                 </div>
-                <Button variant="ghost" className="no-print" onClick={() => window.print()}>
-                  <Printer className="h-4 w-4" /> Imprimir / PDF
-                </Button>
+                {!isArtifact && (
+                  <Button variant="ghost" className="no-print" onClick={() => window.print()}>
+                    <Printer className="h-4 w-4" /> Imprimir / PDF
+                  </Button>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                 <Stat label="Ingreso" value={fmt(p.income)} />

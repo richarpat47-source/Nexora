@@ -33,7 +33,7 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; color-scheme: dark; }
   body {
     @apply bg-ink-900 text-slate-200 font-sans antialiased;
     background-image:

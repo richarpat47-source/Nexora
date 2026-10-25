@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router'
+import { BrowserRouter, MemoryRouter, Navigate, Route, Routes, useLocation } from 'react-router'
+import { isArtifact } from './lib/env'
 import Landing from './landing/Landing'
 
 const AppLayout = lazy(() => import('./app/AppLayout'))
@@ -27,9 +28,12 @@ function Loader() {
   )
 }
 
+// El visor de Artifacts no expone la URL, así que ahí las rutas viven en memoria.
+const Router = isArtifact ? MemoryRouter : BrowserRouter
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <ScrollToTop />
       <Suspense fallback={<Loader />}>
         <Routes>
@@ -47,6 +51,6 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
-    </BrowserRouter>
+    </Router>
   )
 }

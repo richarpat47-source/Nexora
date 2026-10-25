@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 import clsx from 'clsx'
 import { ModuleIcon, Reveal, colorMap } from '../../components/ui'
@@ -7,6 +8,7 @@ import { CheckCircle2, Clock, Play, RotateCcw } from '../../components/icons'
 
 export default function Ruta() {
   const { done, reset } = useProgress()
+  const [confirming, setConfirming] = useState(false)
   return (
     <div>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -16,14 +18,31 @@ export default function Ruta() {
             {modules.length} módulos · {modules.reduce((a, m) => a + m.lessons.length, 0)} lecciones · ~{Math.round(totalMinutes / 60)} h en total
           </p>
         </div>
-        {done.length > 0 && (
-          <button
-            onClick={() => confirm('¿Reiniciar todo tu progreso?') && reset()}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-400 hover:bg-white/5 hover:text-white"
-          >
-            <RotateCcw className="h-4 w-4" /> Reiniciar progreso
-          </button>
-        )}
+        {done.length > 0 &&
+          (confirming ? (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-slate-300">¿Borrar todo tu progreso?</span>
+              <button
+                onClick={() => {
+                  reset()
+                  setConfirming(false)
+                }}
+                className="rounded-full bg-rose-400/90 px-4 py-2 font-bold text-ink-950 hover:bg-rose-300"
+              >
+                Sí, reiniciar
+              </button>
+              <button onClick={() => setConfirming(false)} className="rounded-full px-4 py-2 font-semibold text-slate-300 hover:bg-white/5">
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirming(true)}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-slate-400 hover:bg-white/5 hover:text-white"
+            >
+              <RotateCcw className="h-4 w-4" /> Reiniciar progreso
+            </button>
+          ))}
       </div>
 
       <div className="relative space-y-6">
